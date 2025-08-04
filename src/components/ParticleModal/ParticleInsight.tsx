@@ -12,7 +12,7 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
   async function generateInsight() {
     setLoading(true);
     const _tempParticle = currentParticle;
-    const apiKey = localStorage.get('GEMINI_API_KEY');
+    const apiKey = localStorage.getItem('GEMINI_API_KEY');
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
 
     const body = {
