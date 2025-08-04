@@ -89,7 +89,7 @@ export function ParticleContent({ currentParticle }: { currentParticle: Particle
         <textarea
           placeholder="Ex: 10 - Agachamentos&#10;      5 - Terra"
           name="newDescription"
-          className="w-full resize-none rounded-md border p-1 px-2 contrast-100 outline-none focus:contrast-90"
+          className="scrollbar-float w-full resize-none rounded-md border p-1 px-2 contrast-100 outline-none focus:contrast-90"
           style={{
             borderColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-700) 75%) 95%)`,
 
