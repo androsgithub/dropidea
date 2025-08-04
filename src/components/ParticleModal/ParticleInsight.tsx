@@ -2,6 +2,9 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
+
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { ParticleData } from '../../types/Particle';
@@ -82,34 +85,17 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
     }
   }
   return (
-    <motion.div
-      initial={{
-        scale: 0,
-        opacity: 0,
-        rotate: '30deg',
-        skewX: '30deg'
-      }}
-      animate={{ scale: 1, opacity: 1, rotate: '0deg', skewX: '0deg' }}
-      exit={{ scale: 0, opacity: 0, rotate: '-30deg', skewX: '-30deg' }}
-      transition={{
-        duration: 0.75,
-        bounce: 0.25,
-        type: 'spring'
-      }}
-      className={`flex flex-1 items-center justify-center overflow-hidden rounded-4xl ${currentParticle.insight ? 'w-full' : 'w-xs'}`}
-      style={{
-        backgroundColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
-      }}
-    >
+    <motion.div>
       {loading ? (
         <div className="flex size-full cursor-pointer flex-col items-center justify-center rounded bg-white/5 p-8 font-semibold text-neutral-500 transition-all">
           <p>Carregando.....</p>
         </div>
       ) : currentParticle.insight ? (
-        <div className="flex h-full flex-col gap-2 p-4">
-          <div className="px-4 text-xl font-bold">Insight</div>
-          <div className="prose-sm prose prose-invert overflow-auto p-4">
-            <Markdown remarkPlugins={[remarkGfm]}>{currentParticle.insight}</Markdown>
+        <div className="flex h-full max-h-124 flex-col gap-2 overflow-auto">
+          <div className="prose-sm prose prose-invert scrollbar-float max-w-[125ch] overflow-auto p-4">
+            <Markdown rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
+              {currentParticle.insight}
+            </Markdown>
           </div>
           <div className="flex items-center justify-center gap-2">
             <button

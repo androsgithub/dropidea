@@ -21,6 +21,7 @@ function App() {
     addCircle({ id: uuid(), title: title, description: '', color, icon: '', notes: [] });
     setCreating(false);
   }
+
   return (
     <main className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-neutral-950">
       <form onSubmit={handleSubmit} className="z-50">

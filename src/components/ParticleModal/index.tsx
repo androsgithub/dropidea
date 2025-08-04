@@ -1,7 +1,9 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { Home, Sparkles, X } from 'lucide-react';
 import { validate as isUuid } from 'uuid';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Note } from '../../types/Particle';
+import { Tab, TabButton, TabButtons, TabList, Tabs } from '../Tabs';
 import { ParticleContent } from './ParticleContent';
 import { ParticleFooter } from './ParticleFooter';
 import { ParticleHeader } from './ParticleHeader';
@@ -69,32 +71,42 @@ export function ParticleModal() {
             duration: 0.1
           }}
         >
-          <div className="flex max-h-2/3 gap-4">
-            <motion.form
-              initial={{
-                scale: 0,
-                opacity: 0,
-                rotate: '30deg',
-                skewX: '30deg'
-              }}
-              animate={{ scale: 1, opacity: 1, rotate: '0deg', skewX: '0deg' }}
-              exit={{ scale: 0, opacity: 0, rotate: '-30deg', skewX: '-30deg' }}
-              transition={{
-                duration: 0.75,
-                bounce: 0.25,
-                type: 'spring'
-              }}
-              onSubmit={onSave}
-              className="z-20 flex w-2xl flex-col rounded-4xl p-6"
-              style={{
-                backgroundColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
-              }}
-            >
-              <ParticleHeader close={close} currentParticle={currentParticle} deleteParticle={deleteParticle} />
-              <ParticleContent currentParticle={currentParticle} />
-              <ParticleFooter close={close} currentParticle={currentParticle} />
+          <div className="flex gap-4">
+            <motion.form onSubmit={onSave}>
+              <Tabs>
+                <TabButtons>
+                  {[
+                    { id: 'home', title: 'Home', icon: Home },
+                    { id: 'insights', title: 'Insights', icon: Sparkles }
+                  ].map((tb) => (
+                    <TabButton key={tb.id} id={tb.id}>
+                      <tb.icon /> {tb.title}
+                    </TabButton>
+                  ))}
+                </TabButtons>
+
+                <TabList>
+                  <Tab id="home">
+                    <ParticleHeader close={close} currentParticle={currentParticle} deleteParticle={deleteParticle} />
+                    <ParticleContent currentParticle={currentParticle} />
+                    <ParticleFooter close={close} currentParticle={currentParticle} />
+                  </Tab>
+                  <Tab id="insights">
+                    <div className="relative mb-4 flex w-full items-center justify-between gap-2">
+                      <p className="px-4 text-xl font-bold">Insight</p>
+                      <button
+                        className="cursor-pointer rounded-md p-1.5 hover:bg-neutral-400/5"
+                        onClick={close}
+                        type="button"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <ParticleInsight currentParticle={currentParticle} />
+                  </Tab>
+                </TabList>
+              </Tabs>
             </motion.form>
-            <ParticleInsight currentParticle={currentParticle} />
           </div>
         </motion.dialog>
       )}

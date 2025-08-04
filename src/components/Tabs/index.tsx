@@ -26,7 +26,7 @@ export function Tabs({ children }: TabsProps) {
           initial="initial"
           animate="animate"
           exit="initial"
-          className="flex flex-col gap-2"
+          className="flex min-w-xl flex-col gap-2"
         >
           {children}
         </motion.div>
@@ -40,7 +40,7 @@ export const TabList = ({ children }: TabListProps) => (
   <motion.div
     layout
     transition={{ duration: 0.3, ease: 'easeInOut' }}
-    className="flex min-w-lg flex-col overflow-hidden rounded-2xl bg-neutral-100/5 p-4"
+    className="flex min-w-lg flex-col rounded-2xl bg-neutral-100/5 p-4"
   >
     {children}
   </motion.div>
@@ -57,20 +57,13 @@ type TabProps = { children: ReactNode; id: string };
 export const Tab = ({ children, id }: TabProps) => {
   const { activeTab } = useTabs();
   return (
-    <AnimatePresence mode="popLayout">
+    <>
       {activeTab === id && (
-        <motion.div
-          key={id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="flex flex-1 flex-col"
-        >
+        <div key={id} className="flex min-w-lg flex-1 flex-col">
           {children}
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

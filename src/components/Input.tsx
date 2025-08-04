@@ -68,6 +68,7 @@ export const Input = () => {
         duration: 0.75,
         bounce: 0.25
       }}
+      layout
       initial="initial"
       animate={creating ? 'creating' : 'animate'}
       className="relative flex field-sizing-content items-stretch justify-between overflow-hidden bg-neutral-600/75 backdrop-blur-xl"

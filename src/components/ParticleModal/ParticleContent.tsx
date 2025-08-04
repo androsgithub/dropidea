@@ -100,22 +100,14 @@ export function ParticleContent({ currentParticle }: { currentParticle: Particle
         />
       </div>
       <label className="mb-2 text-sm text-neutral-400">Notas</label>
-      <div className="font-comic-relief grid size-full max-h-72 w-full grid-cols-2 gap-2 overflow-auto">
+      <div className="scrollbar-float font-comic-relief grid size-full max-h-72 w-full grid-cols-2 gap-2 overflow-auto">
         {notes.map((n) => (
-          <motion.textarea
+          <textarea
             key={n.id}
             name={n.id}
             defaultValue={n.text}
-            initial={{
-              scale: 0,
-              opacity: 0
-            }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              duration: 0.1
-            }}
             placeholder="Digite algo ou essa nota sera removida"
-            className="flex h-32 flex-1 resize-none flex-col bg-yellow-300 p-2 align-middle text-xs text-neutral-800 transition-all outline-none placeholder-shown:brightness-50 placeholder-shown:saturate-50"
+            className="scrollbar-float flex h-32 flex-1 resize-none flex-col bg-yellow-300 p-2 align-middle text-xs text-neutral-800 transition-all outline-none placeholder-shown:brightness-50 placeholder-shown:saturate-50"
           />
         ))}
         <button
