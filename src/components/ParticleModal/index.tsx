@@ -28,6 +28,7 @@ export function ParticleModal() {
   }
   function onSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!confirm('Deseja alterar essa particula?')) return;
     if (currentParticle) {
       const formData = new FormData(e.currentTarget);
       const _p = particles.find((p) => p.id === currentParticle.id);
@@ -83,6 +84,11 @@ export function ParticleModal() {
                       <tb.icon /> {tb.title}
                     </TabButton>
                   ))}
+                  <div className="flex flex-1 items-center justify-end">
+                    <TabButton onClick={close}>
+                      <X color="white" />
+                    </TabButton>
+                  </div>
                 </TabButtons>
 
                 <TabList>
@@ -94,13 +100,6 @@ export function ParticleModal() {
                   <Tab id="insights">
                     <div className="relative mb-4 flex w-full items-center justify-between gap-2">
                       <p className="px-4 text-xl font-bold">Insight</p>
-                      <button
-                        className="cursor-pointer rounded-md p-1.5 hover:bg-neutral-400/5"
-                        onClick={close}
-                        type="button"
-                      >
-                        <X size={16} />
-                      </button>
                     </div>
                     <ParticleInsight currentParticle={currentParticle} />
                   </Tab>
