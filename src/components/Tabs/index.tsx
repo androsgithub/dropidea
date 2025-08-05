@@ -40,7 +40,7 @@ export const TabList = ({ children }: TabListProps) => (
   <motion.div
     layout
     transition={{ duration: 0.3, ease: 'easeInOut' }}
-    className="flex min-w-lg flex-col rounded-2xl bg-neutral-100/5 p-4"
+    className="flex min-w-lg flex-col rounded-2xl bg-neutral-100/5 p-4 backdrop-blur-xl"
   >
     {children}
   </motion.div>

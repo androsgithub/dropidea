@@ -63,7 +63,7 @@ export function ParticleModal() {
       {currentParticle && (
         <motion.dialog
           open
-          className="absolute inset-0 z-999 flex size-full items-center justify-center bg-black/10 backdrop-blur-lg"
+          className="absolute inset-0 z-999 flex size-full items-center justify-center bg-black/90"
           variants={dialogVariants}
           initial="closed"
           animate="opened"
