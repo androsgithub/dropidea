@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Particle, ParticleData } from '../../types/Particle';
 import { ParticleButton } from './ParticleButton';
@@ -7,12 +7,11 @@ export const ButtonCirclesBackground = () => {
   const [localParticles, setLocalParticles] = useState<Particle[]>([]);
   const particles = useGlobalStore((state) => state.particles);
   const setCurrentParticle = useGlobalStore((state) => state.setCurrentParticle);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const generatePosition = useCallback((existingParticles: Particle[]) => {
     const offset = 20;
-    const containerWidth = containerRef.current?.clientWidth ?? window.innerWidth;
-    const containerHeight = containerRef.current?.clientHeight ?? window.innerHeight;
+    const containerWidth = window.innerWidth;
+    const containerHeight = window.innerHeight;
 
     const deadZone = {
       top: 35,
@@ -83,7 +82,7 @@ export const ButtonCirclesBackground = () => {
   }
 
   return (
-    <div ref={containerRef} className="absolute flex size-full items-center justify-center">
+    <div className="absolute flex size-full items-center justify-center">
       {localParticles.map(({ data, visual }) => (
         <ParticleButton
           onClick={() => onParticleClick(data)}
@@ -104,10 +103,10 @@ export const ButtonCirclesBackground = () => {
 
 const isInsideDeadZone = (
   deadZone: {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
   },
   left: number,
   top: number
