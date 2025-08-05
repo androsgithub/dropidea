@@ -72,41 +72,39 @@ export function ParticleModal() {
             duration: 0.1
           }}
         >
-          <div className="flex gap-4">
-            <motion.form onSubmit={onSave}>
-              <Tabs>
-                <TabButtons>
-                  {[
-                    { id: 'home', title: 'Home', icon: Home },
-                    { id: 'insights', title: 'Insights', icon: Sparkles }
-                  ].map((tb) => (
-                    <TabButton key={tb.id} id={tb.id}>
-                      <tb.icon /> {tb.title}
-                    </TabButton>
-                  ))}
-                  <div className="flex flex-1 items-center justify-end">
-                    <TabButton onClick={close}>
-                      <X color="white" />
-                    </TabButton>
-                  </div>
-                </TabButtons>
+          <motion.form onSubmit={onSave} className="flex gap-4">
+            <Tabs>
+              <TabButtons>
+                {[
+                  { id: 'home', title: 'Home', icon: Home },
+                  { id: 'insights', title: 'Insights', icon: Sparkles }
+                ].map((tb) => (
+                  <TabButton key={tb.id} id={tb.id}>
+                    <tb.icon /> {tb.title}
+                  </TabButton>
+                ))}
+                <div className="flex flex-1 items-center justify-end">
+                  <TabButton onClick={close}>
+                    <X color="white" />
+                  </TabButton>
+                </div>
+              </TabButtons>
 
-                <TabList>
-                  <Tab id="home">
-                    <ParticleHeader close={close} currentParticle={currentParticle} deleteParticle={deleteParticle} />
-                    <ParticleContent currentParticle={currentParticle} />
-                    <ParticleFooter close={close} currentParticle={currentParticle} />
-                  </Tab>
-                  <Tab id="insights">
-                    <div className="relative mb-4 flex w-full items-center justify-between gap-2">
-                      <p className="px-4 text-xl font-bold">Insight</p>
-                    </div>
-                    <ParticleInsight currentParticle={currentParticle} />
-                  </Tab>
-                </TabList>
-              </Tabs>
-            </motion.form>
-          </div>
+              <TabList>
+                <Tab id="home">
+                  <ParticleHeader close={close} currentParticle={currentParticle} deleteParticle={deleteParticle} />
+                  <ParticleContent currentParticle={currentParticle} />
+                  <ParticleFooter close={close} currentParticle={currentParticle} />
+                </Tab>
+                <Tab id="insights">
+                  <div className="relative mb-4 flex w-full items-center justify-between gap-2">
+                    <p className="px-4 text-xl font-bold">Insight</p>
+                  </div>
+                  <ParticleInsight currentParticle={currentParticle} />
+                </Tab>
+              </TabList>
+            </Tabs>
+          </motion.form>
         </motion.dialog>
       )}
     </AnimatePresence>
