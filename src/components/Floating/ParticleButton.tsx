@@ -53,23 +53,31 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
       },
       top: `${visual.top}%`,
       left: `${visual.left}%`,
-      filter: 'contrast(75%) brightness(75%)'
+      boxShadow: data.insight && `0 0 32px ${data.color}`,
+      filter: 'contrast(100%) brightness(100%)'
     },
     whileHover: {
       scale: 1.6,
-      filter: 'contrast(100%) brightness(100%)',
+      filter: 'contrast(110%) brightness(110%)',
+      transition: { duration: 0.1, delay: 0 }
+    },
+    whileTap: {
+      scale: 1.8,
+      filter: 'contrast(130%) brightness(130%)',
+      boxShadow: `0 0 48px ${data.color}`,
       transition: { duration: 0.1, delay: 0 }
     }
   };
 
   return (
     <motion.button
-      onClick={onClick}
+      onDoubleClick={onClick}
       className="z-50 flex cursor-pointer items-center justify-center text-xl"
       variants={variants}
       initial="initial"
       animate="animate"
       whileHover="whileHover"
+      whileTap="whileTap"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onAnimationComplete={() => setIsAnimationEnd(true)}
@@ -81,6 +89,7 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
         borderRadius: '50%',
         width: floatingSize,
         height: floatingSize,
+        boxShadow: data.insight && `0 0 32px ${data.color}`,
         x,
         y
       }}
