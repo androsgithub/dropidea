@@ -1,7 +1,7 @@
 import type { ParticleData } from '../../types/Particle';
 import { uuidV1ToDate } from '../../util/UuidDate';
 
-export function ParticleFooter({ currentParticle, close }: { currentParticle: ParticleData, close: () => void }) {
+export function ParticleFooter({ currentParticle, close }: { currentParticle: ParticleData; close: () => void }) {
   return (
     <div className="space-y-2">
       <div className="flex gap-2 px-4">

@@ -67,8 +67,8 @@ export const Tab = ({ children, id }: TabProps) => {
   );
 };
 
-type TabButtonProps = { children: ReactNode; id: string };
-export const TabButton = ({ children, id }: TabButtonProps) => {
+type TabButtonProps = { children: ReactNode; id?: string; onClick?: () => void };
+export const TabButton = ({ children, id = '', onClick = () => {} }: TabButtonProps) => {
   const { activeTab, setActiveTab } = useTabs();
 
   const tabButtonVariants: Variants = {
@@ -93,7 +93,10 @@ export const TabButton = ({ children, id }: TabButtonProps) => {
         bounce: 1
       }}
       type="button"
-      onClick={() => setActiveTab(id)}
+      onClick={() => {
+        setActiveTab(id);
+        onClick();
+      }}
       className={`flex cursor-pointer gap-2 rounded-2xl px-4 py-2 transition-colors ${
         isActive ? 'bg-neutral-900' : 'bg-neutral-950 text-neutral-500'
       }`}
