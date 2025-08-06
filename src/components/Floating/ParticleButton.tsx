@@ -1,3 +1,4 @@
+import Color from 'color';
 import { AnimatePresence, motion, useAnimationFrame, useMotionValue, type Variants } from 'framer-motion';
 import { useMemo, useRef, useState } from 'react';
 import type { Particle } from '../../types/Particle';
@@ -54,7 +55,8 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
       },
       top: `${particle.visual.top}%`,
       left: `${particle.visual.left}%`,
-      boxShadow: particle.data.insight && `0 0 32px ${particle.visual.color}`,
+      boxShadow: particle.data.insight ? `0 0 32px ${particle.visual.color}` : `0 0 0px ${particle.visual.color}`,
+
       filter: 'contrast(100%) brightness(100%)'
     },
     whileHover: {
@@ -110,7 +112,7 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
             }}
             className="pointer-events-none absolute bottom-full mb-1 flex justify-self-center rounded-full px-1 py-0.5 text-[8px] font-semibold"
             style={{
-              backgroundColor: particle.visual.color + '48'
+              backgroundColor: Color(particle.visual.color).alpha(0.25).hexa()
             }}
           >
             <p className="max-w-24 flex-1 truncate">{particle.data.title}</p>
