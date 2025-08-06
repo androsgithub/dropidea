@@ -55,9 +55,11 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
       },
       top: `${particle.visual.top}%`,
       left: `${particle.visual.left}%`,
-      boxShadow: particle.data.insight ? `0 0 32px ${particle.visual.color}` : `0 0 0px ${particle.visual.color}`,
-
-      filter: 'contrast(100%) brightness(100%)'
+      boxShadow: particle.data.insight
+        ? `0 0 32px 4px ${particle.visual.color}`
+        : `0 0 0px 0px ${particle.visual.color}`,
+      filter: 'contrast(100%) brightness(100%)',
+      animation: `${particle.states.generatingInsight && 'var(--animate-bounce)'}`
     },
     whileHover: {
       scale: 1.6,

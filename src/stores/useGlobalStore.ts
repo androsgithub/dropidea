@@ -43,16 +43,13 @@ export const useGlobalStore = create<Store>((set) => ({
 
   deleteParticle: (id) =>
     set((state) => {
-      // Filtra a partícula deletada da lista principal
       const _particles = state.particles.filter((p) => p.data.id !== id);
 
-      // Busca a partícula deletada para salvar no deletedParticles
       const deletedParticle = state.particles.find((p) => p.data.id === id);
-      if (!deletedParticle) return {}; // Se não achou, não faz nada
+      if (!deletedParticle) return {};
 
       const _deletedParticles = [...state.deletedParticles, deletedParticle];
 
-      // Atualiza localStorage para ambos arrays
       localStorage.setItem('particlesData', JSON.stringify(_particles));
       localStorage.setItem('deletedParticles', JSON.stringify(_deletedParticles));
 
@@ -61,13 +58,10 @@ export const useGlobalStore = create<Store>((set) => ({
 
   restoreParticle: (id) =>
     set((state) => {
-      // Busca a partícula a ser restaurada
       const restoredParticle = state.deletedParticles.find((p) => p.data.id === id);
       if (!restoredParticle) return {};
 
-      // Remove das deletadas
       const _deletedParticles = state.deletedParticles.filter((p) => p.data.id !== id);
-      // Adiciona na lista principal
       const _particles = [...state.particles, restoredParticle];
 
       // Atualiza localStorage para ambos arrays

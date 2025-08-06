@@ -1,24 +1,16 @@
-import { motion, useAnimationFrame, useMotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { memo } from 'react';
 
 type CircleProps = {
-  color: string,
-  size: number,
-  style: React.CSSProperties,
-  baseTop: number,
-  baseLeft: number,
-  phase: number
+  color: string;
+  size: number;
+  style: React.CSSProperties;
+  baseTop: number;
+  baseLeft: number;
+  phase: number;
 };
 
-export function Circle({ color, size, style, baseTop, baseLeft, phase }: CircleProps) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  useAnimationFrame((t) => {
-    const time = t / 1000;
-    x.set(Math.cos(time + phase) * 5);
-    y.set(Math.sin(time + phase) * 10);
-  });
-
+export const Circle = memo(function Circle({ color, size, style, baseTop, baseLeft, phase }: CircleProps) {
   return (
     <motion.div
       style={{
@@ -29,10 +21,17 @@ export function Circle({ color, size, style, baseTop, baseLeft, phase }: CircleP
         height: size,
         backgroundColor: color,
         borderRadius: '50%',
-        opacity: 0.6,
-        x,
-        y
+        opacity: 0.6
+      }}
+      animate={{
+        x: [Math.cos(phase) * 5, Math.cos(phase + Math.PI) * 5, Math.cos(phase + Math.PI * 2) * 5],
+        y: [Math.sin(phase) * 10, Math.sin(phase + Math.PI) * 10, Math.sin(phase + Math.PI * 2) * 10]
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+        ease: 'linear'
       }}
     />
   );
-}
+});
