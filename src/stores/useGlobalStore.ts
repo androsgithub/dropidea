@@ -1,23 +1,23 @@
 import { create } from 'zustand';
-import type { ParticleData } from '../types/Particle';
+import type { Particle } from '../types/Particle';
 
 type Store = {
   // States
-  creating: boolean,
-  setCreating: (creating: boolean) => void,
+  creating: boolean;
+  setCreating: (creating: boolean) => void;
 
   // Data
-  particles: ParticleData[],
-  deletedParticles: ParticleData[],
+  particles: Particle[];
+  deletedParticles: Particle[];
 
-  addParticle: (particle: ParticleData) => void,
-  updateParticle: (particle: ParticleData) => void,
-  deleteParticle: (id: string) => void,
-  restoreParticle: (id: string) => void,
+  addParticle: (particle: Particle) => void;
+  updateParticle: (particle: Particle) => void;
+  deleteParticle: (id: string) => void;
+  restoreParticle: (id: string) => void;
 
   // Current
-  currentParticle: ParticleData | null,
-  setCurrentParticle: (particle: ParticleData | null) => void
+  currentParticle: Particle | null;
+  setCurrentParticle: (particle: Particle | null) => void;
 };
 
 export const useGlobalStore = create<Store>((set) => ({
@@ -36,7 +36,7 @@ export const useGlobalStore = create<Store>((set) => ({
 
   updateParticle: (updatedParticle) =>
     set((state) => {
-      const _particles = state.particles.map((p) => (p.id === updatedParticle.id ? updatedParticle : p));
+      const _particles = state.particles.map((p) => (p.data.id === updatedParticle.data.id ? updatedParticle : p));
       localStorage.setItem('particlesData', JSON.stringify(_particles));
       return { particles: _particles };
     }),
@@ -44,10 +44,10 @@ export const useGlobalStore = create<Store>((set) => ({
   deleteParticle: (id) =>
     set((state) => {
       // Filtra a partícula deletada da lista principal
-      const _particles = state.particles.filter((p) => p.id !== id);
+      const _particles = state.particles.filter((p) => p.data.id !== id);
 
       // Busca a partícula deletada para salvar no deletedParticles
-      const deletedParticle = state.particles.find((p) => p.id === id);
+      const deletedParticle = state.particles.find((p) => p.data.id === id);
       if (!deletedParticle) return {}; // Se não achou, não faz nada
 
       const _deletedParticles = [...state.deletedParticles, deletedParticle];
@@ -62,11 +62,11 @@ export const useGlobalStore = create<Store>((set) => ({
   restoreParticle: (id) =>
     set((state) => {
       // Busca a partícula a ser restaurada
-      const restoredParticle = state.deletedParticles.find((p) => p.id === id);
+      const restoredParticle = state.deletedParticles.find((p) => p.data.id === id);
       if (!restoredParticle) return {};
 
       // Remove das deletadas
-      const _deletedParticles = state.deletedParticles.filter((p) => p.id !== id);
+      const _deletedParticles = state.deletedParticles.filter((p) => p.data.id !== id);
       // Adiciona na lista principal
       const _particles = [...state.particles, restoredParticle];
 

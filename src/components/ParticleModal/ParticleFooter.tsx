@@ -1,7 +1,7 @@
-import type { ParticleData } from '../../types/Particle';
+import type { Particle } from '../../types/Particle';
 import { uuidV1ToDate } from '../../util/UuidDate';
 
-export function ParticleFooter({ currentParticle, close }: { currentParticle: ParticleData; close: () => void }) {
+export function ParticleFooter({ currentParticle, close }: { currentParticle: Particle; close: () => void }) {
   return (
     <div className="space-y-2">
       <div className="flex gap-2 px-4">
@@ -21,9 +21,9 @@ export function ParticleFooter({ currentParticle, close }: { currentParticle: Pa
       </div>
       <div className="flex items-center justify-end gap-4">
         <p className="text-xs font-extralight text-neutral-300/25">
-          Data: {uuidV1ToDate(currentParticle.id)?.toLocaleString()}
+          Data: {uuidV1ToDate(currentParticle.data.id)?.toLocaleString()}
         </p>
-        <p className="text-xs font-extralight text-neutral-300/25">ID: {currentParticle.id}</p>
+        <p className="text-xs font-extralight text-neutral-300/25">ID: {currentParticle.data.id}</p>
       </div>
     </div>
   );

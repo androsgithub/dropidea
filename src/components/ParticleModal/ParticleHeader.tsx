@@ -1,24 +1,24 @@
 import { Trash } from 'lucide-react';
-import type { ParticleData } from '../../types/Particle';
+import type { Particle } from '../../types/Particle';
 
 export function ParticleHeader({
   currentParticle,
   deleteParticle,
   close
 }: {
-  currentParticle: ParticleData;
+  currentParticle: Particle;
   deleteParticle: (id: string) => void;
   close: () => void;
 }) {
   function removeParticle() {
-    if (confirm(`Quer mesmo deletar a particula: ${currentParticle.title}?`)) {
-      deleteParticle(currentParticle.id);
+    if (confirm(`Quer mesmo deletar a particula: ${currentParticle.data.title}?`)) {
+      deleteParticle(currentParticle.data.id);
       close();
     }
   }
   return (
     <div className="relative flex items-center justify-between gap-2">
-      <p className="w-full truncate px-4 text-xs text-neutral-500">{currentParticle.title}</p>
+      <p className="w-full truncate px-4 text-xs text-neutral-500">{currentParticle.data.title}</p>
       <button
         type="button"
         onClick={removeParticle}

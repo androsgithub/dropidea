@@ -4,14 +4,14 @@ import { Plus } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { v1 as uuid } from 'uuid';
-import type { ParticleData } from '../../types/Particle';
+import type { Particle } from '../../types/Particle';
 
-export function ParticleContent({ currentParticle }: { currentParticle: ParticleData }) {
-  const [title, setTitle] = useState(currentParticle.title);
-  const [description, setDescription] = useState(currentParticle.description);
-  const [notes, setNotes] = useState(currentParticle.notes);
-  const [emoji, setEmoji] = useState(currentParticle.icon);
-  const [color, setColor] = useState(currentParticle.color);
+export function ParticleContent({ currentParticle }: { currentParticle: Particle }) {
+  const [title, setTitle] = useState(currentParticle.data.title);
+  const [description, setDescription] = useState(currentParticle.data.description);
+  const [notes, setNotes] = useState(currentParticle.data.notes);
+  const [emoji, setEmoji] = useState(currentParticle.visual.icon);
+  const [color, setColor] = useState(currentParticle.visual.color);
 
   const [isSelectingEmoji, setIsSelectingEmoji] = useState(false);
   const [isSelectingColor, setIsSelectingColor] = useState(false);
@@ -40,9 +40,9 @@ export function ParticleContent({ currentParticle }: { currentParticle: Particle
             name="newTitle"
             className="w-full rounded-md border p-1 px-2 contrast-100 outline-none focus:contrast-90"
             style={{
-              borderColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-700) 75%) 95%)`,
+              borderColor: `color-mix(in srgb, ${currentParticle.visual.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-700) 75%) 95%)`,
 
-              backgroundColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
+              backgroundColor: `color-mix(in srgb, ${currentParticle.visual.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
             }}
             value={title}
             onChange={onTitleChange}
@@ -91,9 +91,9 @@ export function ParticleContent({ currentParticle }: { currentParticle: Particle
           name="newDescription"
           className="scrollbar-float w-full resize-none rounded-md border p-1 px-2 contrast-100 outline-none focus:contrast-90"
           style={{
-            borderColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-700) 75%) 95%)`,
+            borderColor: `color-mix(in srgb, ${currentParticle.visual.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-700) 75%) 95%)`,
 
-            backgroundColor: `color-mix(in srgb, ${currentParticle.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
+            backgroundColor: `color-mix(in srgb, ${currentParticle.visual.color} 5%,  color-mix(in srgb, transparent 25%, var(--color-neutral-800) 75%) 95%)`
           }}
           value={description}
           onChange={onDescriptionChange}

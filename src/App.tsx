@@ -4,8 +4,10 @@ import { DecorativeCirclesBackground } from './components/Floating/DecorativeCir
 import { Input } from './components/Input';
 import { ParticleModal } from './components/ParticleModal';
 import { useGlobalStore } from './stores/useGlobalStore';
+import { generatePosition } from './util/Position';
 
 function App() {
+  const particles = useGlobalStore((state) => state.particles);
   const setCreating = useGlobalStore((state) => state.setCreating);
   const addCircle = useGlobalStore((state) => state.addParticle);
 
@@ -18,7 +20,12 @@ function App() {
     setCreating(true);
     e.currentTarget.reset();
     await new Promise((r) => setTimeout(r, 2000));
-    addCircle({ id: uuid(), title: title, description: '', color, icon: '', notes: [] });
+
+    addCircle({
+      data: { id: uuid(), title: title, description: '', notes: [], insight: '' },
+      visual: { ...generatePosition(particles), color, icon: '' },
+      states: { generatingInsight: false }
+    });
     setCreating(false);
   }
 

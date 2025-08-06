@@ -31,16 +31,16 @@ export function ParticleModal() {
     if (!confirm('Deseja alterar essa particula?')) return;
     if (currentParticle) {
       const formData = new FormData(e.currentTarget);
-      const _p = particles.find((p) => p.id === currentParticle.id);
+      const _p = particles.find((p) => p.data.id === currentParticle.data.id);
       if (_p) {
-        _p.title = formData.get('newTitle') as string;
-        _p.description = formData.get('newDescription') as string;
-        _p.color = formData.get('color') as string;
-        _p.icon = formData.get('icon') as string;
+        _p.data.title = formData.get('newTitle') as string;
+        _p.data.description = formData.get('newDescription') as string;
+        _p.visual.color = formData.get('color') as string;
+        _p.visual.icon = formData.get('icon') as string;
         const newNotes: Note[] = [];
         for (const [key, value] of formData.entries()) {
           if (isUuid(key)) {
-            const existingNote = _p.notes.find((n) => n.id === key);
+            const existingNote = _p.data.notes.find((n) => n.id === key);
             console.log(existingNote);
             if (existingNote && value != '') {
               existingNote.text = value as string;
@@ -51,7 +51,7 @@ export function ParticleModal() {
           }
         }
 
-        _p.notes = newNotes;
+        _p.data.notes = newNotes;
         updateParticle(_p);
       }
       close();

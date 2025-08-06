@@ -2,12 +2,13 @@ import { AnimatePresence, motion, useAnimationFrame, useMotionValue, type Varian
 import { useMemo, useRef, useState } from 'react';
 import type { Particle } from '../../types/Particle';
 
-interface ParticleButtonProps extends Particle {
+interface ParticleButtonProps {
+  particle: Particle;
   style: React.CSSProperties;
   onClick: () => void;
 }
 
-export function ParticleButton({ data, visual, style, onClick }: ParticleButtonProps) {
+export function ParticleButton({ particle, style, onClick }: ParticleButtonProps) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const floatingSize = useMotionValue(42);
@@ -34,10 +35,10 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
 
     const time = elapsed.current;
 
-    x.set(Math.cos(time + visual.phase) * 5);
-    y.set(Math.sin(time + visual.phase) * 10);
+    x.set(Math.cos(time + particle.visual.phase) * 5);
+    y.set(Math.sin(time + particle.visual.phase) * 10);
 
-    const pulse = 1 + 0.1 * Math.sin(time * 2 + visual.phase);
+    const pulse = 1 + 0.1 * Math.sin(time * 2 + particle.visual.phase);
     floatingSize.set(42 * pulse);
   });
   const variants: Variants = {
@@ -51,9 +52,9 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
         bounce: 0.25,
         mass: 0.5
       },
-      top: `${visual.top}%`,
-      left: `${visual.left}%`,
-      boxShadow: data.insight && `0 0 32px ${data.color}`,
+      top: `${particle.visual.top}%`,
+      left: `${particle.visual.left}%`,
+      boxShadow: particle.data.insight && `0 0 32px ${particle.visual.color}`,
       filter: 'contrast(100%) brightness(100%)'
     },
     whileHover: {
@@ -64,7 +65,7 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
     whileTap: {
       scale: 1.8,
       filter: 'contrast(130%) brightness(130%)',
-      boxShadow: `0 0 48px ${data.color}`,
+      boxShadow: `0 0 48px ${particle.visual.color}`,
       transition: { duration: 0.1, delay: 0 }
     }
   };
@@ -83,18 +84,18 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
       onAnimationComplete={() => setIsAnimationEnd(true)}
       style={{
         ...style,
-        top: `${visual.top}%`,
-        left: `${visual.left}%`,
-        backgroundColor: data.color,
+        top: `${particle.visual.top}%`,
+        left: `${particle.visual.left}%`,
+        backgroundColor: particle.visual.color,
         borderRadius: '50%',
         width: floatingSize,
         height: floatingSize,
-        boxShadow: data.insight && `0 0 32px ${data.color}`,
+        boxShadow: particle.data.insight && `0 0 32px ${particle.visual.color}`,
         x,
         y
       }}
     >
-      {data.icon}
+      {particle.visual.icon}
       <AnimatePresence>
         {isHovered && (
           <motion.div
@@ -109,10 +110,10 @@ export function ParticleButton({ data, visual, style, onClick }: ParticleButtonP
             }}
             className="pointer-events-none absolute bottom-full mb-1 flex justify-self-center rounded-full px-1 py-0.5 text-[8px] font-semibold"
             style={{
-              backgroundColor: data.color + '48'
+              backgroundColor: particle.visual.color + '48'
             }}
           >
-            <p className="max-w-24 flex-1 truncate">{data.title}</p>
+            <p className="max-w-24 flex-1 truncate">{particle.data.title}</p>
           </motion.div>
         )}
       </AnimatePresence>

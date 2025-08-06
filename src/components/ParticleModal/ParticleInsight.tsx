@@ -7,9 +7,9 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import { useGlobalStore } from '../../stores/useGlobalStore';
-import type { ParticleData } from '../../types/Particle';
+import type { Particle } from '../../types/Particle';
 
-export function ParticleInsight({ currentParticle }: { currentParticle: ParticleData }) {
+export function ParticleInsight({ currentParticle }: { currentParticle: Particle }) {
   const updateParticle = useGlobalStore((state) => state.updateParticle);
   const [loading, setLoading] = useState(false);
   async function generateInsight() {
@@ -72,7 +72,7 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
     }
     const data = await response.json();
     const content = data['candidates'][0]['content']['parts'][0]['text'];
-    _tempParticle.insight = content;
+    _tempParticle.data.insight = content;
     updateParticle(_tempParticle);
 
     setLoading(false);
@@ -80,7 +80,7 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
   }
   function removeInsight() {
     if (confirm('Deseja remover esse insight?')) {
-      currentParticle.insight = '';
+      currentParticle.data.insight = '';
       updateParticle(currentParticle);
     }
   }
@@ -90,11 +90,11 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
         <div className="flex size-full cursor-pointer flex-col items-center justify-center rounded bg-white/5 p-8 font-semibold text-neutral-500 transition-all">
           <p>Carregando.....</p>
         </div>
-      ) : currentParticle.insight ? (
+      ) : currentParticle.data.insight ? (
         <div className="flex h-full max-h-124 flex-col gap-2 overflow-auto">
           <div className="prose-sm prose prose-invert scrollbar-float max-w-[125ch] overflow-auto p-4">
             <Markdown rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
-              {currentParticle.insight}
+              {currentParticle.data.insight}
             </Markdown>
           </div>
           <div className="flex items-center justify-center gap-2">
