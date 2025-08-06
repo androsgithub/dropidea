@@ -5,7 +5,9 @@ import { useGlobalStore } from '../stores/useGlobalStore';
 import { getRandomColor } from '../util/Colors';
 export const Input = () => {
   const [color, setColor] = useState<string>('');
+  const [inputInFocus, setInputInFocus] = useState(false);
   const creating = useGlobalStore((state) => state.creating);
+
   const containerVariants: Variants = {
     initial: {
       opacity: 0,
@@ -13,7 +15,8 @@ export const Input = () => {
       y: 400
     },
     animate: {
-      scale: 1,
+      scale: 0.85,
+
       height: 'auto',
       minWidth: `var(--container-2xs)`,
       opacity: 1,
@@ -31,6 +34,17 @@ export const Input = () => {
       borderRadius: '1rem',
       height: '2rem',
       width: '2rem',
+      y: 0
+    },
+    focus: {
+      scale: 1,
+      height: 'auto',
+      minWidth: `var(--container-2xs)`,
+      opacity: 1,
+      borderRadius: `var(--radius-3xl)`,
+      backgroundColor: color + '24',
+      filter: `grayscale(25%)`,
+      width: 'auto',
       y: 0
     }
   };
@@ -70,14 +84,16 @@ export const Input = () => {
       }}
       layout
       initial="initial"
-      animate={creating ? 'creating' : 'animate'}
-      className="relative flex field-sizing-content items-stretch justify-between overflow-hidden bg-neutral-600/75 backdrop-blur-xl"
+      animate={creating ? 'creating' : inputInFocus ? 'focus' : 'animate'}
+      className="relative flex field-sizing-content max-h-[calc(100vh-12rem)] items-stretch justify-between overflow-hidden bg-neutral-600/75 backdrop-blur-xl"
     >
       <input type="hidden" name="color" value={color} />
       <AnimatePresence>
         {!creating && (
           <>
             <motion.textarea
+              onFocus={() => setInputInFocus(true)}
+              onBlur={() => setInputInFocus(false)}
               minLength={8}
               variants={textareaVariants}
               initial="creating"
@@ -93,7 +109,7 @@ export const Input = () => {
               name="idea"
               rows={1}
               placeholder="💡 Digite aqui..."
-              className="flex field-sizing-content w-full max-w-sm flex-1 resize-none overflow-hidden rounded px-4 py-3 transition-all outline-none"
+              className="scrollbar-float flex field-sizing-content w-full max-w-sm flex-1 resize-none overflow-auto rounded px-4 py-3 transition-all outline-none"
             />
             <motion.button
               variants={buttonVariants}
