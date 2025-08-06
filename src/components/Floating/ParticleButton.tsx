@@ -99,9 +99,9 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
       <AnimatePresence>
         {isHovered && (
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0, rotate: '45deg' }}
-            animate={{ opacity: 1, y: 0, scale: 1, rotate: '0deg' }}
-            exit={{ opacity: 0, y: 40, scale: 0, rotate: '-45deg' }}
+            initial={{ opacity: 0, y: 40, scaleY: 0, scaleX: 2, rotate: '45deg' }}
+            animate={{ opacity: 1, y: 0, scaleY: 1, scaleX: 1, rotate: '0deg' }}
+            exit={{ opacity: 0, y: 40, scaleY: 0, scaleX: 2, rotate: '-45deg' }}
             transition={{
               duration: 0.5,
               type: 'spring',
