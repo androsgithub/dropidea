@@ -6,15 +6,28 @@ import Markdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
+import { useInterval } from 'usehooks-ts';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Particle } from '../../types/Particle';
 
 export function ParticleInsight({ currentParticle }: { currentParticle: Particle }) {
   const updateParticle = useGlobalStore((state) => state.updateParticle);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(currentParticle.states.generatingInsight);
+  useInterval(
+    () => {
+      const _tempParticle = currentParticle;
+      _tempParticle.states.generatingInsight = false;
+      setLoading(false);
+      updateParticle(_tempParticle);
+    },
+    loading ? 15000 : null
+  );
+
   async function generateInsight() {
     setLoading(true);
     const _tempParticle = currentParticle;
+    _tempParticle.states.generatingInsight = true;
+    updateParticle(_tempParticle);
     const apiKey = localStorage.getItem('GEMINI_API_KEY');
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
 
@@ -73,6 +86,7 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
     const data = await response.json();
     const content = data['candidates'][0]['content']['parts'][0]['text'];
     _tempParticle.data.insight = content;
+    _tempParticle.states.generatingInsight = false;
     updateParticle(_tempParticle);
 
     setLoading(false);
