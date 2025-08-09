@@ -72,7 +72,7 @@ export function ParticleModal() {
             duration: 0.1
           }}
         >
-          <motion.form onSubmit={onSave} className="flex max-w-[calc(100vw-12rem)] gap-4">
+          <motion.form onSubmit={onSave} className="flex gap-4 md:max-w-[calc(100vw-12rem)]">
             <Tabs>
               <TabButtons>
                 {[

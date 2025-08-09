@@ -22,7 +22,7 @@ export function ParticleHeader({
       <button
         type="button"
         onClick={removeParticle}
-        className="absolute left-[-5rem] cursor-pointer rounded-xl bg-red-500 p-4 transition-all hover:bg-red-600"
+        className="cursor-pointer rounded-xl bg-red-500 p-2 transition-all hover:bg-red-600 md:absolute md:left-[-5rem] md:p-4"
       >
         <Trash size={20} />
       </button>

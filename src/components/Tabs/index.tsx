@@ -26,7 +26,7 @@ export function Tabs({ children }: TabsProps) {
           initial="initial"
           animate="animate"
           exit="initial"
-          className="flex min-w-xl flex-col gap-2"
+          className="flex flex-col gap-2 md:max-w-4xl md:min-w-xl"
         >
           {children}
         </motion.div>
@@ -40,7 +40,7 @@ export const TabList = ({ children }: TabListProps) => (
   <motion.div
     layout
     transition={{ duration: 0.3, ease: 'easeInOut' }}
-    className="flex min-w-lg flex-col rounded-2xl bg-neutral-100/5 p-4 backdrop-blur-xl"
+    className="flex flex-col rounded-2xl bg-neutral-100/5 p-4 backdrop-blur-xl md:min-w-lg"
   >
     {children}
   </motion.div>
@@ -59,7 +59,7 @@ export const Tab = ({ children, id }: TabProps) => {
   return (
     <>
       {activeTab === id && (
-        <div key={id} className="flex min-w-lg flex-1 flex-col">
+        <div key={id} className="flex flex-1 flex-col md:min-w-lg">
           {children}
         </div>
       )}

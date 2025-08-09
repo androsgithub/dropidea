@@ -107,7 +107,7 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
         </div>
       ) : currentParticle.data.insight ? (
         <div className="flex h-full max-h-124 flex-col gap-2 overflow-auto">
-          <div className="prose-sm prose prose-invert scrollbar-float max-w-[125ch] overflow-auto p-4">
+          <div className="prose-sm prose prose-invert scrollbar-float max-w-[calc(100dvw-4rem)] overflow-auto p-4 md:max-w-[125ch]">
             <Markdown rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
               {currentParticle.data.insight}
             </Markdown>
