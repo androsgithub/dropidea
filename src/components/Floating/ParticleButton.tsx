@@ -1,5 +1,6 @@
 import Color from 'color';
 import { AnimatePresence, motion, useAnimationFrame, useMotionValue, type Variants } from 'framer-motion';
+import { LoaderCircle } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import type { Particle } from '../../types/Particle';
 
@@ -18,7 +19,7 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
   const [isAnimationEnd, setIsAnimationEnd] = useState(false);
 
   const delay = useMemo(() => {
-    return isAnimationEnd ? 0 : Math.random() * 0.1 + 0.1;
+    return isAnimationEnd ? 0 : Math.random() * 0.5 + 0.1;
   }, [isAnimationEnd]);
 
   const lastTime = useRef(0);
@@ -99,7 +100,18 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
         y
       }}
     >
-      {particle.visual.icon}
+      {particle.states.generatingInsight ? (
+        <LoaderCircle
+          className="animate-spin"
+          color={
+            Color(particle.visual.color).isDark()
+              ? Color(particle.visual.color).white(25).lighten(0.5).hex()
+              : Color(particle.visual.color).black(25).darken(0.5).hex()
+          }
+        />
+      ) : (
+        particle.visual.icon
+      )}
       <AnimatePresence>
         {isHovered && (
           <motion.div
