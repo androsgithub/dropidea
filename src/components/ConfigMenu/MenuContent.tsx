@@ -36,7 +36,7 @@ export function MenuContent({ open, setOpened, handleSubmit }: MenuContentProps)
           initial="initial"
           animate="animate"
           exit="exit"
-          className="absolute top-4 right-4 z-500 flex max-w-2xl min-w-xl flex-col rounded-3xl bg-white/10 p-6 backdrop-blur-2xl"
+          className="absolute top-4 z-500 flex w-[calc(100dvw-2rem)] min-w-xs flex-col rounded-3xl bg-white/10 p-6 backdrop-blur-2xl md:right-4 md:max-w-2xl md:min-w-xl"
           onSubmit={handleSubmit}
         >
           <div className="flex justify-between">
