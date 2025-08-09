@@ -1,18 +1,19 @@
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { CircleAlert, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
 
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
-import { useInterval } from 'usehooks-ts';
+import { useInterval, useLocalStorage } from 'usehooks-ts';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Particle } from '../../types/Particle';
 
 export function ParticleInsight({ currentParticle }: { currentParticle: Particle }) {
   const updateParticle = useGlobalStore((state) => state.updateParticle);
   const [loading, setLoading] = useState(currentParticle.states.generatingInsight);
+  const [apiKey] = useLocalStorage('GEMINI_API_KEY', '');
   useInterval(
     () => {
       const _tempParticle = currentParticle;
@@ -24,11 +25,11 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
   );
 
   async function generateInsight() {
+    if (apiKey == '') return;
     setLoading(true);
     const _tempParticle = currentParticle;
     _tempParticle.states.generatingInsight = true;
     updateParticle(_tempParticle);
-    const apiKey = localStorage.getItem('GEMINI_API_KEY');
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
 
     const body = {
@@ -128,14 +129,25 @@ export function ParticleInsight({ currentParticle }: { currentParticle: Particle
             </button>
           </div>
         </div>
-      ) : (
+      ) : apiKey ? (
         <button
           className="flex size-full cursor-pointer flex-col items-center justify-center rounded bg-transparent p-8 font-semibold text-neutral-500 transition-all hover:bg-white/5"
           onClick={generateInsight}
+          type="button"
         >
           <Sparkles size={64} strokeWidth={1} />
           <p>Gerar Insight</p>
         </button>
+      ) : (
+        <a
+          href="https://aistudio.google.com/app/apikey"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex size-full animate-pulse flex-col items-center justify-center rounded bg-transparent p-8 font-semibold text-neutral-500 transition-all hover:scale-105"
+        >
+          <CircleAlert size={64} strokeWidth={2} />
+          <p>Você precisa configurar a Api Key</p>
+        </a>
       )}
     </motion.div>
   );

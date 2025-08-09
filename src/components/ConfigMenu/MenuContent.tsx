@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useLocalStorage } from 'usehooks-ts';
 
 type MenuContentProps = {
   open: boolean;
@@ -7,6 +8,7 @@ type MenuContentProps = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 export function MenuContent({ open, setOpened, handleSubmit }: MenuContentProps) {
+  const [apiKey] = useLocalStorage('GEMINI_API_KEY', '');
   const variants: Variants = {
     initial: {
       scale: 0.5,
@@ -53,7 +55,7 @@ export function MenuContent({ open, setOpened, handleSubmit }: MenuContentProps)
             type="text"
             name="gemini-api-key"
             className="rounded-2xl bg-white/5 p-4 py-2 outline-none"
-            defaultValue={localStorage.getItem('GEMINI_API_KEY') ?? ''}
+            defaultValue={apiKey}
           />
           <div className="mt-4 flex justify-between gap-2">
             <button
