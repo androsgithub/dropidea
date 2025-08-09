@@ -1,11 +1,11 @@
 import { v1 as uuid } from 'uuid';
+import { ConfigMenu } from './components/ConfigMenu';
 import { ButtonCirclesBackground } from './components/Floating/ButtonCirclesBackground';
 import { DecorativeCirclesBackground } from './components/Floating/DecorativeCirclesBackground';
 import { Input } from './components/Input';
 import { ParticleModal } from './components/ParticleModal';
 import { useGlobalStore } from './stores/useGlobalStore';
 import { generatePosition } from './util/Position';
-import { ConfigMenu } from './components/ConfigMenu';
 
 function App() {
   const particles = useGlobalStore((state) => state.particles);
@@ -31,7 +31,7 @@ function App() {
   }
 
   return (
-    <main className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-neutral-950">
+    <main className="relative flex h-dvh w-dvw items-center justify-center overflow-hidden bg-neutral-950">
       <form onSubmit={handleSubmit} className="z-50">
         <Input />
       </form>
