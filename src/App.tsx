@@ -5,6 +5,7 @@ import { Input } from './components/Input';
 import { ParticleModal } from './components/ParticleModal';
 import { useGlobalStore } from './stores/useGlobalStore';
 import { generatePosition } from './util/Position';
+import { ConfigMenu } from './components/ConfigMenu';
 
 function App() {
   const particles = useGlobalStore((state) => state.particles);
@@ -35,6 +36,7 @@ function App() {
         <Input />
       </form>
       <ParticleModal />
+      <ConfigMenu />
       <ButtonCirclesBackground />
       <Background />
     </main>
