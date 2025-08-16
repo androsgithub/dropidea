@@ -1,12 +1,13 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
-import { Home, Sparkles, X } from 'lucide-react';
+import { Home, ListTodo, Sparkles, X } from 'lucide-react';
 import { validate as isUuid } from 'uuid';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Note } from '../../types/Particle';
 import { Tab, TabButton, TabButtons, TabList, Tabs } from '../Tabs';
-import { ParticleContent } from './ParticleContent';
-import { ParticleFooter } from './ParticleFooter';
-import { ParticleHeader } from './ParticleHeader';
+
+import { ParticleContent } from './ParticleDetails/ParticleContent';
+import { ParticleFooter } from './ParticleDetails/ParticleFooter';
+import { ParticleHeader } from './ParticleDetails/ParticleHeader';
 import { ParticleInsight } from './ParticleInsight';
 
 export function ParticleModal() {
@@ -97,9 +98,6 @@ export function ParticleModal() {
                   <ParticleFooter close={close} currentParticle={currentParticle} />
                 </Tab>
                 <Tab id="insights">
-                  <div className="relative mb-4 flex w-full items-center justify-between gap-2">
-                    <p className="px-4 text-xl font-bold">Insight</p>
-                  </div>
                   <ParticleInsight currentParticle={currentParticle} />
                 </Tab>
               </TabList>

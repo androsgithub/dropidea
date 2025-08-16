@@ -1,5 +1,5 @@
-import type { Particle } from '../../types/Particle';
-import { uuidV1ToDate } from '../../util/UuidDate';
+import type { Particle } from '../../../types/Particle';
+import { uuidV1ToDate } from '../../../util/UuidDate';
 
 export function ParticleFooter({ currentParticle, close }: { currentParticle: Particle; close: () => void }) {
   return (

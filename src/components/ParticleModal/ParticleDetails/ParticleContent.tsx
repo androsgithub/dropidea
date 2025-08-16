@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { v1 as uuid } from 'uuid';
-import type { Particle } from '../../types/Particle';
+import type { Particle } from '../../../types/Particle';
 
 export function ParticleContent({ currentParticle }: { currentParticle: Particle }) {
   const [title, setTitle] = useState(currentParticle.data.title);

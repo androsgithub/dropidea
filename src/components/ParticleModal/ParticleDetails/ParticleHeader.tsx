@@ -1,5 +1,5 @@
 import { Trash } from 'lucide-react';
-import type { Particle } from '../../types/Particle';
+import type { Particle } from '../../../types/Particle';
 
 export function ParticleHeader({
   currentParticle,
