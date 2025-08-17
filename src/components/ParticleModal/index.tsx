@@ -4,11 +4,11 @@ import { validate as isUuid } from 'uuid';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 import type { Note } from '../../types/Particle';
 import { Tab, TabButton, TabButtons, TabList, Tabs } from '../Tabs';
-
 import { ParticleContent } from './ParticleDetails/ParticleContent';
 import { ParticleFooter } from './ParticleDetails/ParticleFooter';
 import { ParticleHeader } from './ParticleDetails/ParticleHeader';
 import { ParticleInsight } from './ParticleInsight';
+import { ParticleTasks } from './ParticleTasks';
 
 export function ParticleModal() {
   const particles = useGlobalStore((state) => state.particles);
@@ -78,7 +78,8 @@ export function ParticleModal() {
               <TabButtons>
                 {[
                   { id: 'home', title: 'Home', icon: Home },
-                  { id: 'insights', title: 'Insights', icon: Sparkles }
+                  { id: 'insights', title: 'Insights', icon: Sparkles },
+                  { id: 'tasks', title: 'Tasks', icon: ListTodo }
                 ].map((tb) => (
                   <TabButton key={tb.id} id={tb.id}>
                     <tb.icon /> {tb.title}
@@ -99,6 +100,9 @@ export function ParticleModal() {
                 </Tab>
                 <Tab id="insights">
                   <ParticleInsight currentParticle={currentParticle} />
+                </Tab>
+                <Tab id="tasks">
+                  <ParticleTasks currentParticle={currentParticle} />
                 </Tab>
               </TabList>
             </Tabs>

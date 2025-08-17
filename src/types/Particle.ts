@@ -9,6 +9,7 @@ export type ParticleData = {
   description: string;
   notes: Note[];
   insight?: string;
+  tasks?: Task[];
 };
 
 export type ParticleVisual = {
@@ -26,4 +27,11 @@ export type ParticleState = {
 export type Note = {
   id: string;
   text: string;
+};
+
+export type Task = {
+  id: string;
+  title: string;
+  description: string;
+  done: boolean;
 };
