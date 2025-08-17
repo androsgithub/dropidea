@@ -19,6 +19,7 @@ function App() {
     const color = (formData.get('color') as string) ?? '';
     if (formData.get('idea') == '') return;
     setCreating(true);
+
     e.currentTarget.reset();
     await new Promise((r) => setTimeout(r, 2000));
 
