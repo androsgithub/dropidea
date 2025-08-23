@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useAnimationFrame, useMotionValue, type Varian
 import { LoaderCircle } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import type { Particle } from '../../types/Particle';
+import { ParticleProgress } from './Particle/ParticleProgress';
 
 interface ParticleButtonProps {
   particle: Particle;
@@ -100,6 +101,12 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
         y
       }}
     >
+      {particle.data.tasks && (
+        <ParticleProgress
+          percentage={(particle.data.tasks.filter((p) => p.done).length / particle.data.tasks.length) * 100}
+          baseColor={particle.visual.color}
+        />
+      )}
       {particle.states.generatingInsight ? (
         <LoaderCircle
           className="animate-spin"
