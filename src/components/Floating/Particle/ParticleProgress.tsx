@@ -2,9 +2,9 @@ import Color from 'color';
 import { motion, useAnimationFrame, useMotionValue } from 'framer-motion';
 
 type ParticleProgressProps = {
-  percentage: number;
-  baseColor: string;
-  size: number;
+  percentage?: number;
+  baseColor?: string;
+  size?: number;
 };
 export function ParticleProgress({ percentage = 0, baseColor = '#ffffff', size = 64 }: ParticleProgressProps) {
   const rotation = useMotionValue(0);
