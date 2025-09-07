@@ -1,8 +1,22 @@
 import { motion } from 'framer-motion';
-import { ListTodo, Notebook, Sparkles } from 'lucide-react';
+import { ListTodo, Notebook, Sparkles, type LucideProps } from 'lucide-react';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 
-export const TabsSection = ({ currentTab, setCurrentTab }) => {
+type TabsSection = {
+  currentTab: {
+    id: string;
+    title: string;
+    icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
+  } | null;
+  setCurrentTab: React.Dispatch<
+    React.SetStateAction<{
+      id: string;
+      title: string;
+      icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
+    } | null>
+  >;
+};
+export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
   const currentParticle = useGlobalStore((state) => state.currentParticle);
   const tabs = [
     {
