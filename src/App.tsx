@@ -49,10 +49,10 @@ function App() {
 
   return (
     <main className="relative flex h-dvh w-dvw items-center justify-center overflow-hidden bg-neutral-950">
+      <ParticleModal />
       <form onSubmit={handleSubmit} className="z-50">
         <Input />
       </form>
-      <ParticleModal />
       <ConfigMenu />
       <ButtonCirclesBackground />
       <Background />
@@ -66,13 +66,10 @@ function Background() {
   return (
     <>
       <div className="absolute size-full opacity-30 blur-xs">
-        <DecorativeCirclesBackground count={16} offset={32} />
+        <DecorativeCirclesBackground count={32} offset={12} />
       </div>
       <div className="absolute size-full opacity-20 blur-xs">
-        <DecorativeCirclesBackground count={32} offset={24} />
-      </div>
-      <div className="absolute size-full opacity-10 blur-xs">
-        <DecorativeCirclesBackground count={64} offset={16} />
+        <DecorativeCirclesBackground count={64} offset={8} />
       </div>
     </>
   );

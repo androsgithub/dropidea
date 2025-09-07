@@ -6,9 +6,9 @@ interface MiniParticleProps {
 }
 export function MiniParticle({ i, total = 12, baseColor = '#ffffff' }: MiniParticleProps) {
   const floatingSize = useMotionValue(1);
-  useAnimationFrame((t) => floatingSize.set(1.1 * (0.5 + 0.1 * Math.sin(t / 1000)) + 0.01));
+  useAnimationFrame((t) => floatingSize.set(1 * (0.25 + 0.1 * Math.sin(t / 1000)) + 0.01));
 
-  const size = 8 + Math.random() * 8;
+  const size = 16 + Math.random() * 8;
   const radius = 16 + size;
   const angle = (i / total) * Math.PI * 2;
   const offsetX = Math.cos(angle) * (radius + Math.random() * 4);

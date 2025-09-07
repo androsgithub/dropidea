@@ -8,7 +8,7 @@ export type ParticleData = {
   title: string;
   description: string;
   notes: Note[];
-  insight?: string;
+  insight?: string | string[];
   tasks?: Task[];
   tags?: string[];
 };

@@ -107,6 +107,7 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
           baseColor={particle.visual.color}
         />
       )}
+
       {particle.states.generatingInsight ? (
         <LoaderCircle
           className="animate-spin"
@@ -131,7 +132,7 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
               bounce: 1,
               mass: 0.5
             }}
-            className="pointer-events-none absolute bottom-full mb-1 flex justify-self-center rounded-full px-1 py-0.5 text-[8px] font-semibold"
+            className="pointer-events-none absolute bottom-full mb-1 flex justify-self-center rounded-full px-1 py-0.5 text-[8px] font-semibold backdrop-blur-3xl"
             style={{
               backgroundColor: Color(particle.visual.color).alpha(0.25).hexa()
             }}

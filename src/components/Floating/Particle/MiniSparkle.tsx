@@ -14,7 +14,7 @@ export function MiniSparkle({ i, total = 12, baseColor = '#ffffff' }: MiniSparkl
     rotation.set((delta * 30) % 360);
   });
 
-  const size = 16 + Math.random() * 8;
+  const size = 32 + Math.random() * 8;
   const radius = 24 + size;
   const angle = (i / total) * Math.PI * 2;
   const offsetX = Math.cos(angle) * (radius + Math.random() * 4);
