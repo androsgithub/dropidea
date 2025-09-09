@@ -100,8 +100,7 @@ export function ParticleButton({ particle, style, onClick }: ParticleButtonProps
         y
       }}
     >
-      {}
-      {particle.data.tasks && (
+      {particle.data.tasks && particle.data.tasks.length > 0 && (
         <ParticleProgress
           key={particle.data.id}
           percentage={(particle.data.tasks.filter((p) => p.done).length / particle.data.tasks.length) * 100}
