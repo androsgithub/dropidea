@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { ListTodo, Notebook, Sparkles, type LucideProps } from 'lucide-react';
 import { useGlobalStore } from '../../stores/useGlobalStore';
 
@@ -51,46 +51,83 @@ export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
     }
   ];
 
+  const tabsSectionVariants: Variants = {
+    initial: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05 // Reduzi para 0.2s para ser mais suave
+      }
+    }
+  };
+
+  const tabVariants: Variants = {
+    initial: {
+      scale: 0,
+      opacity: 0,
+      flex: 1
+    },
+    animate: {
+      scale: 1,
+      opacity: 0.5, // Opacidade padrão
+      flex: 2,
+      borderRadius: 16,
+      transition: {
+        type: 'spring',
+        stiffness: 300,
+        damping: 20
+      }
+    },
+    exit: {
+      scale: 0,
+      opacity: 0,
+      flex: 1,
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
+
   return (
-    <div className="top-0 mt-4 flex flex-1 gap-2" onClick={(e) => e.stopPropagation()}>
-      {tabs.map((tab) => (
-        <motion.button
-          onClick={() => setCurrentTab((prev) => (tab?.id == prev?.id ? null : tab))}
-          key={tab.id}
-          initial={{
-            scale: 0,
-            opacity: 0,
-            flex: 1
-          }}
-          animate={{
-            scale: 1,
-            opacity: currentTab?.id == tab.id ? 1 : 0.5,
-            flex: currentTab?.id == tab.id ? 3 : 2,
-            borderRadius: 16
-          }}
-          exit={{
-            scale: 0,
-            opacity: 0,
-            flex: 1
-          }}
-          whileHover={{
-            opacity: 1,
-            flex: currentTab?.id == tab.id ? 3 : 4,
-            scale: 1.05
-          }}
-          whileTap={{
-            scale: currentTab ? 1 : 1.1,
-            scaleY: 0.85,
-            y: 4
-          }}
-          className="flex flex-1 cursor-pointer items-center justify-between gap-1 border border-white/2 bg-neutral-900 px-4 py-3 text-xs sm:text-sm"
-        >
-          <span className="flex items-center justify-between gap-2">
-            <tab.icon size={16} /> {tab.title}
-          </span>
-          <span>{tab.sizeText}</span>
-        </motion.button>
-      ))}
-    </div>
+    <motion.div
+      variants={tabsSectionVariants}
+      initial="initial"
+      animate="animate"
+      className="top-0 mt-4 flex flex-1 gap-2"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <AnimatePresence>
+        {tabs.map((tab) => (
+          <motion.button
+            onClick={() => setCurrentTab((prev) => (tab?.id == prev?.id ? null : tab))}
+            key={tab.id}
+            variants={tabVariants}
+            animate={{
+              ...tabVariants.animate,
+              opacity: currentTab?.id == tab.id ? 1 : 0.5,
+              flex: currentTab?.id == tab.id ? 3 : 2
+            }}
+            whileHover={{
+              opacity: 1,
+              flex: currentTab?.id == tab.id ? 3 : 4,
+              scale: 1.05
+            }}
+            whileTap={{
+              scale: currentTab ? 1 : 1.1,
+              scaleY: 0.85,
+              y: 4
+            }}
+            className="flex flex-1 cursor-pointer items-center justify-between gap-1 border border-white/2 bg-neutral-900 px-4 py-3 text-xs sm:text-sm"
+          >
+            <span className="flex items-center justify-between gap-2">
+              <tab.icon size={16} /> {tab.title}
+            </span>
+            <span>{tab.sizeText}</span>
+          </motion.button>
+        ))}
+      </AnimatePresence>
+    </motion.div>
   );
 };
