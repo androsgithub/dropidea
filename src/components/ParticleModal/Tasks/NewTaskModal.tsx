@@ -1,18 +1,16 @@
 import { v1 as uuid } from 'uuid';
 
 import { Check, X } from 'lucide-react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Task } from '../../../types/Particle';
+import type { Particle, Task } from '../../../types/Particle';
 import { Modal } from '../../Modal';
 
 type NewTaskModalProps = {
   isOpen: boolean;
   setIsOpen: (isCreatingNewTask: boolean) => void;
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function NewTaskModal({ isOpen, setIsOpen }: NewTaskModalProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
-
+export function NewTaskModal({ isOpen, setIsOpen, currentParticle, updateCurrentParticle }: NewTaskModalProps) {
   function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!currentParticle) return;
@@ -30,7 +28,7 @@ export function NewTaskModal({ isOpen, setIsOpen }: NewTaskModalProps) {
 
       if (!currentParticle.data.tasks) currentParticle.data.tasks = [];
       currentParticle.data.tasks?.unshift(task);
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
     setIsOpen(false);
   }

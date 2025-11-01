@@ -6,7 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import { useInterval, useLocalStorage } from 'usehooks-ts';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
+import type { Particle } from '../../../types/Particle';
 import { Pagination } from '../../Pagination';
 
 type InsightsContainerProps = {
@@ -17,10 +17,16 @@ type InsightsContainerProps = {
       icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
     } | null
   ) => void;
+  currentParticle: Particle | null | undefined;
+  setGeneratingInsight: (generating: boolean) => Promise<Particle | null | undefined>;
+  updateInsightInCurrentParticle: (insight: string | string[]) => Promise<Particle | null | undefined>;
 };
-export function InsightsContainer({ setCurrentTab }: InsightsContainerProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+export function InsightsContainer({
+  setCurrentTab,
+  currentParticle,
+  setGeneratingInsight,
+  updateInsightInCurrentParticle
+}: InsightsContainerProps) {
   const [currentInsightIndex, setCurrentInsightIndex] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -47,11 +53,10 @@ export function InsightsContainer({ setCurrentTab }: InsightsContainerProps) {
   const [apiKey] = useLocalStorage('GEMINI_API_KEY', '');
   useInterval(
     () => {
-      const _tempParticle = currentParticle;
-      if (!_tempParticle) return;
-      _tempParticle.states.generatingInsight = false;
+      if (!currentParticle) return;
+      currentParticle.states.generatingInsight = false;
       setLoading(false);
-      updateParticle(_tempParticle);
+      setGeneratingInsight(false);
     },
     loading ? 30000 : null
   );
@@ -59,8 +64,9 @@ export function InsightsContainer({ setCurrentTab }: InsightsContainerProps) {
     if (!currentParticle) return;
     if (Array.isArray(currentParticle.data.insight)) {
       if (confirm('Deseja mesmo deletar esse Insight?')) {
-        currentParticle.data.insight = currentParticle.data.insight.filter((_, index) => index !== currentInsightIndex);
-        updateParticle(currentParticle);
+        updateInsightInCurrentParticle(
+          currentParticle.data.insight.filter((_, index) => index !== currentInsightIndex)
+        );
         setCurrentInsightIndex(null);
       }
     }
@@ -72,13 +78,10 @@ export function InsightsContainer({ setCurrentTab }: InsightsContainerProps) {
     if (apiKey == '') return;
 
     setLoading(true);
+    setGeneratingInsight(true);
 
-    currentParticle.states.generatingInsight = true;
-    const _tempParticle = { ...currentParticle };
-    if (!_tempParticle) return;
-    updateParticle(_tempParticle);
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
-    const inputData = { ..._tempParticle, data: { ..._tempParticle.data, insight: [] } };
+    const inputData = { ...currentParticle, data: { ...currentParticle.data, insight: [] } };
     const body = {
       contents: [
         {
@@ -132,15 +135,20 @@ export function InsightsContainer({ setCurrentTab }: InsightsContainerProps) {
     }
     const data = await response.json();
     const content = data['candidates'][0]['content']['parts'][0]['text'];
-    if (Array.isArray(_tempParticle.data.insight)) {
-      _tempParticle.data.insight.push(content);
+    const insights = [];
+    if (Array.isArray(currentParticle.data.insight)) {
+      insights.push(content);
     } else {
-      const list = [_tempParticle.data.insight ?? ''];
-      list.push(content);
-      _tempParticle.data.insight = list;
+      if (currentParticle.data.insight == '') {
+        insights.push(content);
+      } else {
+        insights.push(currentParticle.data.insight);
+        insights.push(content);
+      }
+
+      updateInsightInCurrentParticle(insights);
     }
-    _tempParticle.states.generatingInsight = false;
-    updateParticle(_tempParticle);
+    setGeneratingInsight(false);
     setLoading(false);
   }
   if (currentInsightIndex != null)

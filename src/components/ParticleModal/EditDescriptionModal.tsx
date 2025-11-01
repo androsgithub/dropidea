@@ -1,15 +1,19 @@
 import { Save, X } from 'lucide-react';
-import { useGlobalStore } from '../../stores/useGlobalStore';
+import type { Particle } from '../../types/Particle';
 import { Modal } from '../Modal';
 
 type DescriptionModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function EditDescriptionModal({ isOpen, onClose }: DescriptionModalProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
-
+export function EditDescriptionModal({
+  isOpen,
+  onClose,
+  currentParticle,
+  updateCurrentParticle
+}: DescriptionModalProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!currentParticle) return;
@@ -18,7 +22,7 @@ export function EditDescriptionModal({ isOpen, onClose }: DescriptionModalProps)
 
     if (description != '') {
       currentParticle.data.description = description;
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
     onClose();
   }

@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { ListTodo, Notebook, Sparkles, type LucideProps } from 'lucide-react';
-import { useGlobalStore } from '../../stores/useGlobalStore';
+import type { Particle } from '../../types/Particle';
 
 type TabsSection = {
   currentTab: {
@@ -15,9 +15,10 @@ type TabsSection = {
       icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
     } | null>
   >;
+  currentParticle: Particle | null | undefined;
 };
-export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
+
+export const TabsSection = ({ currentTab, setCurrentTab, currentParticle }: TabsSection) => {
   const tabs = [
     {
       id: 'tasks',
@@ -95,6 +96,7 @@ export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
       variants={tabsSectionVariants}
       initial="initial"
       animate="animate"
+      exit="exit"
       className="top-0 mt-4 flex flex-1 gap-2"
       onClick={(e) => e.stopPropagation()}
     >
@@ -112,6 +114,7 @@ export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
             whileHover={{
               opacity: 1,
               flex: currentTab?.id == tab.id ? 3 : 4,
+
               scale: 1.05
             }}
             whileTap={{
@@ -119,7 +122,7 @@ export const TabsSection = ({ currentTab, setCurrentTab }: TabsSection) => {
               scaleY: 0.85,
               y: 4
             }}
-            className="flex flex-1 cursor-pointer items-center justify-between gap-1 border border-white/2 bg-neutral-900 px-4 py-3 text-xs sm:text-sm"
+            className="flex flex-1 cursor-pointer items-center justify-between gap-1 border border-white/2 bg-neutral-900 px-4 py-3 text-xs will-change-transform sm:text-sm"
           >
             <span className="flex items-center justify-between gap-2">
               <tab.icon size={16} /> {tab.title}

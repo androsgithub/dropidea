@@ -1,25 +1,32 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import { useState } from 'react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
+import type { Particle } from '../../../types/Particle';
 import { Tooltip } from '../../Tooltip';
 import { TagModal } from './TagModal';
 
-export const TagsSection = () => {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+type TagsSectionProps = {
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
+};
+export const TagsSection = ({ currentParticle, updateCurrentParticle }: TagsSectionProps) => {
   const [isAddingTag, setIsAddingTag] = useState(false);
 
   function removeTag(tag: string) {
     if (!currentParticle) return;
     if (confirm(`Deseja remover a tag "${tag}"?`)) {
       currentParticle.data.tags = currentParticle.data.tags?.filter((tg) => tg != tag);
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
   }
   return (
     <>
-      <TagModal isOpen={isAddingTag} onClose={() => setIsAddingTag(false)} />
+      <TagModal
+        isOpen={isAddingTag}
+        onClose={() => setIsAddingTag(false)}
+        currentParticle={currentParticle}
+        updateCurrentParticle={updateCurrentParticle}
+      />
 
       <motion.div
         className="flex items-center gap-1 text-center"

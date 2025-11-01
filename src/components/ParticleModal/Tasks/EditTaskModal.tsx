@@ -1,17 +1,21 @@
 import { Pencil, X } from 'lucide-react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Task } from '../../../types/Particle';
+import type { Particle, Task } from '../../../types/Particle';
 import { Modal } from '../../Modal';
 
 type NewTaskModalProps = {
   isOpen: boolean;
   setCurrentTask: (isCreatingNewTask: Task | null) => void;
   currentTask: Task | null;
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function EditTaskModal({ isOpen, setCurrentTask, currentTask }: NewTaskModalProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
-
+export function EditTaskModal({
+  isOpen,
+  setCurrentTask,
+  currentTask,
+  currentParticle,
+  updateCurrentParticle
+}: NewTaskModalProps) {
   function handleEdit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!currentParticle) return;
@@ -32,7 +36,7 @@ export function EditTaskModal({ isOpen, setCurrentTask, currentTask }: NewTaskMo
       currentParticle.data.tasks = currentParticle.data.tasks?.map((task) =>
         task.id == currentTask?.id ? editedTask : task
       );
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
     setCurrentTask(null);
   }

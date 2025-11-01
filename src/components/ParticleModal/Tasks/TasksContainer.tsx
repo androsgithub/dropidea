@@ -1,7 +1,6 @@
 import { Plus, Search, X, type LucideProps } from 'lucide-react';
 import { useState } from 'react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Task } from '../../../types/Particle';
+import type { Particle, Task } from '../../../types/Particle';
 import { Pagination } from '../../Pagination';
 import { EditTaskModal } from './EditTaskModal';
 import { NewTaskModal } from './NewTaskModal';
@@ -15,9 +14,10 @@ type TasksContainerProps = {
       icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
     } | null
   ) => void;
+  currentParticle: Particle | null;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function TasksContainer({ setCurrentTab }: TasksContainerProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
+export function TasksContainer({ setCurrentTab, currentParticle, updateCurrentParticle }: TasksContainerProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreatingNewTask, setIsCreatingNewTask] = useState(false);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
@@ -35,8 +35,19 @@ export function TasksContainer({ setCurrentTab }: TasksContainerProps) {
 
   return (
     <>
-      <NewTaskModal isOpen={isCreatingNewTask} setIsOpen={setIsCreatingNewTask} />
-      <EditTaskModal isOpen={currentTask != null} setCurrentTask={setCurrentTask} currentTask={currentTask} />
+      <NewTaskModal
+        isOpen={isCreatingNewTask}
+        setIsOpen={setIsCreatingNewTask}
+        currentParticle={currentParticle}
+        updateCurrentParticle={updateCurrentParticle}
+      />
+      <EditTaskModal
+        isOpen={currentTask != null}
+        setCurrentTask={setCurrentTask}
+        currentTask={currentTask}
+        currentParticle={currentParticle}
+        updateCurrentParticle={updateCurrentParticle}
+      />
       <div className="flex items-center justify-between px-4 pt-2">
         <div className="flex items-center justify-center gap-1">
           {currentParticle?.data.tasks?.length && currentParticle?.data.tasks?.length > 0 ? (
@@ -64,7 +75,13 @@ export function TasksContainer({ setCurrentTab }: TasksContainerProps) {
           {currentParticle?.data?.tasks
             ?.slice((currentPage - 1) * maxItems, (currentPage - 1) * maxItems + maxItems)
             ?.map((task) => (
-              <TaskTile key={task.id} setCurrentTask={setCurrentTask} task={task} />
+              <TaskTile
+                key={task.id}
+                setCurrentTask={setCurrentTask}
+                task={task}
+                currentParticle={currentParticle}
+                updateCurrentParticle={updateCurrentParticle}
+              />
             ))}
 
           {currentParticle?.data.tasks?.length == 0 && (

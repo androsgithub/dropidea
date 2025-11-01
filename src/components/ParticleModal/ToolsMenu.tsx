@@ -4,28 +4,33 @@ import { Laugh, PaintBucket, RefreshCw, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { useInterval } from 'usehooks-ts';
-import { useGlobalStore } from '../../stores/useGlobalStore';
+import { useParticles } from '../../hooks/useParticles';
+import type { Particle } from '../../types/Particle';
 import { Tooltip } from '../Tooltip';
 
 export const ToolsMenu = ({
   isShowingTools,
-  setIsShowingTools
+  setIsShowingTools,
+  currentParticle,
+  setCurrentParticle,
+  updateCurrentParticle
 }: {
   isShowingTools: boolean;
   setIsShowingTools: (isShowingTools: boolean) => void;
+  currentParticle: Particle | null | undefined;
+  setCurrentParticle: (particle: Particle | null) => void;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 }) => {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const setCurrentParticle = useGlobalStore((state) => state.setCurrentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
-  const deleteParticle = useGlobalStore((state) => state.deleteParticle);
+  const { remove } = useParticles();
   const [isEditingEmoji, setIsEditingEmoji] = useState(false);
+  const [color, setColor] = useState(currentParticle?.visual.color);
   const [isEditingColor, setIsEditingColor] = useState(false);
   useInterval(() => setIsShowingTools(false), isShowingTools && !(isEditingColor || isEditingEmoji) ? 5000 : null);
 
   function removeParticle() {
     if (!currentParticle) return;
     if (confirm(`Quer mesmo deletar a particula: ${currentParticle.data.title}?`)) {
-      deleteParticle(currentParticle.data.id);
+      remove(currentParticle.data.id);
       setCurrentParticle(null);
     }
   }
@@ -33,13 +38,13 @@ export const ToolsMenu = ({
   function onEmojiClick(e: EmojiClickData) {
     if (!currentParticle) return;
     currentParticle.visual.icon = e.emoji;
-    updateParticle(currentParticle);
+    updateCurrentParticle(currentParticle);
     setIsEditingEmoji(false);
   }
-  function onColorChange(color: string) {
+  function onColorChange() {
     if (!currentParticle) return;
-    currentParticle.visual.color = color;
-    updateParticle(currentParticle);
+    currentParticle.visual.color = color ?? '#ffffff';
+    updateCurrentParticle(currentParticle);
   }
 
   return (
@@ -120,7 +125,7 @@ export const ToolsMenu = ({
           transition={{ duration: 0.75, type: 'spring' }}
           className="absolute top-0 left-14 z-900 overflow-hidden"
         >
-          <HexColorPicker color={currentParticle?.visual.color} onChange={onColorChange} />
+          <HexColorPicker color={currentParticle?.visual.color} onChange={setColor} onMouseUp={onColorChange} />
         </motion.div>
       </Tooltip>
     </motion.div>

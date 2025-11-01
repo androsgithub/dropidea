@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { CloudAlert, Pencil, type LucideProps } from 'lucide-react';
 import { useState } from 'react';
+import { useCurrentParticle } from '../../hooks/useCurrentParticle';
 import { opacityVariants } from '../../motion-variants/common';
-import { useGlobalStore } from '../../stores/useGlobalStore';
 import { Tooltip } from '../Tooltip';
 import { EditDescriptionModal } from './EditDescriptionModal';
 import { EditTitleModal } from './EditTitleModal';
@@ -15,8 +15,13 @@ import { TasksContainer } from './Tasks/TasksContainer';
 import { ToolsMenu } from './ToolsMenu';
 
 export const ParticleModal = () => {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const setCurrentParticle = useGlobalStore((state) => state.setCurrentParticle);
+  const {
+    currentParticle,
+    setCurrentParticle,
+    updateCurrentParticle,
+    setGeneratingInsight,
+    updateInsightInCurrentParticle
+  } = useCurrentParticle();
 
   const [currentTab, setCurrentTab] = useState<{
     id: string;
@@ -50,8 +55,18 @@ export const ParticleModal = () => {
     <AnimatePresence propagate>
       {currentParticle && (
         <>
-          <EditTitleModal isOpen={isEditingTitle} onClose={() => setIsEditingTitle(false)} />
-          <EditDescriptionModal isOpen={isEditingDescription} onClose={() => setIsEditingDescription(false)} />
+          <EditTitleModal
+            isOpen={isEditingTitle}
+            onClose={() => setIsEditingTitle(false)}
+            currentParticle={currentParticle}
+            updateCurrentParticle={updateCurrentParticle}
+          />
+          <EditDescriptionModal
+            isOpen={isEditingDescription}
+            onClose={() => setIsEditingDescription(false)}
+            currentParticle={currentParticle}
+            updateCurrentParticle={updateCurrentParticle}
+          />
           <motion.div
             variants={opacityVariants}
             initial="initial"
@@ -87,7 +102,13 @@ export const ParticleModal = () => {
                       onClick={() => setIsShowingTools((prev) => !prev)}
                     />
 
-                    <ToolsMenu isShowingTools={isShowingTools} setIsShowingTools={setIsShowingTools} />
+                    <ToolsMenu
+                      isShowingTools={isShowingTools}
+                      setIsShowingTools={setIsShowingTools}
+                      currentParticle={currentParticle}
+                      setCurrentParticle={setCurrentParticle}
+                      updateCurrentParticle={updateCurrentParticle}
+                    />
                   </div>
                   <AlertIcon />
                 </div>
@@ -98,11 +119,11 @@ export const ParticleModal = () => {
                     description={currentParticle.data.description}
                     setIsEditingDescription={setIsEditingDescription}
                   />
-                  <TagsSection />
+                  <TagsSection currentParticle={currentParticle} updateCurrentParticle={updateCurrentParticle} />
                 </div>
               </motion.div>
               <div className="w-full flex-1">
-                <TabsSection currentTab={currentTab} setCurrentTab={setCurrentTab} />
+                <TabsSection currentTab={currentTab} setCurrentTab={setCurrentTab} currentParticle={currentParticle} />
                 <AnimatePresence mode="sync">
                   {currentTab && (
                     <motion.div
@@ -117,13 +138,28 @@ export const ParticleModal = () => {
                       onClick={(e) => e.stopPropagation()}
                     >
                       {currentTab?.id == 'notes' && (
-                        <NotesContainer key={currentTab?.id} setCurrentTab={setCurrentTab} />
+                        <NotesContainer
+                          key={currentTab?.id}
+                          setCurrentTab={setCurrentTab}
+                          updateCurrentParticle={updateCurrentParticle}
+                        />
                       )}
                       {currentTab?.id == 'insights' && (
-                        <InsightsContainer key={currentTab?.id} setCurrentTab={setCurrentTab} />
+                        <InsightsContainer
+                          key={currentTab?.id}
+                          setCurrentTab={setCurrentTab}
+                          currentParticle={currentParticle}
+                          setGeneratingInsight={setGeneratingInsight}
+                          updateInsightInCurrentParticle={updateInsightInCurrentParticle}
+                        />
                       )}
                       {currentTab?.id == 'tasks' && (
-                        <TasksContainer key={currentTab?.id} setCurrentTab={setCurrentTab} />
+                        <TasksContainer
+                          key={currentTab?.id}
+                          setCurrentTab={setCurrentTab}
+                          currentParticle={currentParticle}
+                          updateCurrentParticle={updateCurrentParticle}
+                        />
                       )}
                     </motion.div>
                   )}

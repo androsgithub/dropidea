@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { v1 as uuid } from 'uuid';
 import { ConfigMenu } from './components/ConfigMenu';
@@ -5,16 +6,18 @@ import { ButtonCirclesBackground } from './components/Floating/ButtonCirclesBack
 import { DecorativeCirclesBackground } from './components/Floating/DecorativeCirclesBackground';
 import { Input } from './components/Input';
 import { ParticleModal } from './components/ParticleModal';
+import { particleService } from './db/particle/particle.service';
+import { useParticles } from './hooks/useParticles';
 import { TagGeneratorFactory } from './services/TagGenerator';
 import { useGlobalStore } from './stores/useGlobalStore';
 import type { Particle } from './types/Particle';
+import { migrateParticlesFromLocalStorage } from './util/MigrationFromLocalStorageToDB';
 import { generatePosition } from './util/Position';
 
 function App() {
-  const particles = useGlobalStore((state) => state.particles);
+  const { activeParticles } = useParticles();
   const setCreating = useGlobalStore((state) => state.setCreating);
-  const addCircle = useGlobalStore((state) => state.addParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+
   const [apiKey] = useLocalStorage('GEMINI_API_KEY', '');
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,22 +33,38 @@ function App() {
     await new Promise((r) => setTimeout(r, 2000));
     try {
       const _particle: Particle = {
-        data: { id: uuid(), title: title, description: '', notes: [], insight: '', tasks: [], tags: [] },
-        visual: { ...generatePosition(particles), color, icon: '' },
+        data: {
+          id: uuid(),
+          title: title,
+          description: '',
+          notes: [],
+          insight: '',
+          tasks: [],
+          tags: [],
+          deleted: false
+        },
+        visual: { ...generatePosition(activeParticles), color, icon: '' },
         states: { generatingInsight: false }
       };
-      addCircle(_particle);
+      particleService.add(_particle);
       const tagGenerator = TagGeneratorFactory.create({ apiKey });
       tagGenerator
         .generateTags(title)
         .then((tags: string[]) => {
           _particle.data.tags = tags;
         })
-        .finally(() => updateParticle(_particle));
+        .finally(() => particleService.update(_particle.data.id, _particle));
     } finally {
       setCreating(false);
     }
   }
+
+  useEffect(() => {
+    (async () => {
+      await migrateParticlesFromLocalStorage('particlesData', false).finally();
+      // loadParticles();
+    })();
+  }, []);
 
   return (
     <main className="relative flex h-dvh w-dvw items-center justify-center overflow-hidden bg-neutral-950">

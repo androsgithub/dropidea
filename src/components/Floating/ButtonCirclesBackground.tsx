@@ -1,11 +1,13 @@
-import { useGlobalStore } from '../../stores/useGlobalStore';
+import { useCurrentParticle } from '../../hooks/useCurrentParticle';
+import { useParticles } from '../../hooks/useParticles';
 import type { Particle } from '../../types/Particle';
 import { ParticleButton } from './ParticleButton';
 
 export const ButtonCirclesBackground = () => {
   // const [localParticles, setLocalParticles] = useState<Particle[]>([]);
-  const particles = useGlobalStore((state) => state.particles);
-  const setCurrentParticle = useGlobalStore((state) => state.setCurrentParticle);
+  // const particles = useGlobalStore((state) => state.particles);
+  const { activeParticles } = useParticles();
+  const { setCurrentParticle } = useCurrentParticle();
 
   // useEffect(() => {
   //   setLocalParticles((prevLocalParticles) => {
@@ -30,7 +32,7 @@ export const ButtonCirclesBackground = () => {
 
   return (
     <div className="absolute flex size-full items-center justify-center">
-      {particles.map((particle) => (
+      {activeParticles.map((particle) => (
         <ParticleButton
           particle={particle}
           onClick={() => onParticleClick(particle)}

@@ -1,14 +1,14 @@
 import { Plus, X } from 'lucide-react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
+import type { Particle } from '../../../types/Particle';
 import { Modal } from '../../Modal';
 
 type TagModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function TagModal({ isOpen, onClose }: TagModalProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+export function TagModal({ isOpen, onClose, currentParticle, updateCurrentParticle }: TagModalProps) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!currentParticle) return;
@@ -23,7 +23,7 @@ export function TagModal({ isOpen, onClose }: TagModalProps) {
     }
 
     console.log(currentParticle.data.tags);
-    updateParticle(currentParticle);
+    updateCurrentParticle(currentParticle);
     onClose();
   }
 

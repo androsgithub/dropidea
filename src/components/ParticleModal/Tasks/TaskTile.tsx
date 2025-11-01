@@ -2,10 +2,19 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Check, ChevronRight, Pencil, Trash } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { useInterval } from 'usehooks-ts';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Task } from '../../../types/Particle';
+import type { Particle, Task } from '../../../types/Particle';
 
-export function TaskTile({ task, setCurrentTask }: { task: Task; setCurrentTask: (task: Task) => void }) {
+export function TaskTile({
+  task,
+  setCurrentTask,
+  currentParticle,
+  updateCurrentParticle
+}: {
+  task: Task;
+  setCurrentTask: (task: Task) => void;
+  currentParticle: Particle | null | undefined;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
+}) {
   const [isOptionsOpened, setIsOptionsOpened] = useState(false);
 
   useInterval(() => setIsOptionsOpened(false), isOptionsOpened ? 5000 : null);
@@ -14,11 +23,10 @@ export function TaskTile({ task, setCurrentTask }: { task: Task; setCurrentTask:
     if (!currentParticle) return;
     if (confirm('Deseja mesmo deletar essa tarefa?')) {
       currentParticle.data.tasks = currentParticle.data.tasks?.filter((task) => task.id !== id);
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
   }
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+
   return (
     <div className="flex items-center px-4">
       <motion.label
@@ -43,7 +51,8 @@ export function TaskTile({ task, setCurrentTask }: { task: Task; setCurrentTask:
             currentParticle.data.tasks = currentParticle.data.tasks?.map((task) =>
               task.id === id ? { ...task, done: checked } : task
             );
-            updateParticle(currentParticle);
+
+            updateCurrentParticle(currentParticle);
             task.done = checked;
           }}
         />

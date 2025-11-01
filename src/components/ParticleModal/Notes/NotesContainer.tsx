@@ -1,7 +1,7 @@
 import { Plus, Search, X, type LucideProps } from 'lucide-react';
 import { useState } from 'react';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Note } from '../../../types/Particle';
+import { useCurrentParticle } from '../../../hooks/useCurrentParticle';
+import type { Note, Particle } from '../../../types/Particle';
 import { Pagination } from '../../Pagination';
 import { NoteModal } from './NoteModal';
 
@@ -13,9 +13,10 @@ type NotesContainerProps = {
       icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
     } | null
   ) => void;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function NotesContainer({ setCurrentTab }: NotesContainerProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
+export function NotesContainer({ setCurrentTab, updateCurrentParticle }: NotesContainerProps) {
+  const { currentParticle } = useCurrentParticle();
   const [currentPage, setCurrentPage] = useState(1);
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
   const [isCreatingNewNote, setIsCreatingNewNote] = useState(false);
@@ -39,6 +40,7 @@ export function NotesContainer({ setCurrentTab }: NotesContainerProps) {
         isOpen={currentNote != null || isCreatingNewNote}
         setCurrentNote={setCurrentNote}
         setIsCreatingNewNote={setIsCreatingNewNote}
+        updateCurrentParticle={updateCurrentParticle}
       />
       <div className="relative flex items-center justify-between px-4 pt-4">
         {currentParticle?.data.notes?.length && currentParticle?.data.notes?.length > 0 ? (

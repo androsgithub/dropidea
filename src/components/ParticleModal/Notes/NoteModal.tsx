@@ -1,7 +1,7 @@
 import { Plus, Save, Trash, X } from 'lucide-react';
 import { v1 as uuid } from 'uuid';
-import { useGlobalStore } from '../../../stores/useGlobalStore';
-import type { Note } from '../../../types/Particle';
+import { useCurrentParticle } from '../../../hooks/useCurrentParticle';
+import type { Note, Particle } from '../../../types/Particle';
 import { Modal } from '../../Modal';
 
 type NoteModalProps = {
@@ -9,10 +9,16 @@ type NoteModalProps = {
   setIsCreatingNewNote: (isCreatingNewNote: boolean) => void;
   setCurrentNote: (isCreatingNewTask: Note | null) => void;
   currentNote: Note | null;
+  updateCurrentParticle: (changes: Partial<Particle>) => Promise<Particle | null>;
 };
-export function NoteModal({ isOpen, setCurrentNote, currentNote, setIsCreatingNewNote }: NoteModalProps) {
-  const currentParticle = useGlobalStore((state) => state.currentParticle);
-  const updateParticle = useGlobalStore((state) => state.updateParticle);
+export function NoteModal({
+  isOpen,
+  setCurrentNote,
+  currentNote,
+  setIsCreatingNewNote,
+  updateCurrentParticle
+}: NoteModalProps) {
+  const { currentParticle } = useCurrentParticle();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,7 +43,7 @@ export function NoteModal({ isOpen, setCurrentNote, currentNote, setIsCreatingNe
       } else {
         currentParticle.data.notes = [tempNote];
       }
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
     }
     closeModal();
   }
@@ -49,7 +55,7 @@ export function NoteModal({ isOpen, setCurrentNote, currentNote, setIsCreatingNe
     if (!currentParticle) return;
     if (confirm('Deseja remover essa nota?')) {
       currentParticle.data.notes = currentParticle.data.notes.filter((note) => currentNote != note);
-      updateParticle(currentParticle);
+      updateCurrentParticle(currentParticle);
       closeModal();
     }
   }

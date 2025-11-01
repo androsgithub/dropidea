@@ -11,6 +11,7 @@ export type ParticleData = {
   insight?: string | string[];
   tasks?: Task[];
   tags?: string[];
+  deleted: boolean;
 };
 
 export type ParticleVisual = {
