@@ -61,7 +61,9 @@ export const useCurrentParticle = () => {
     async updateCurrentParticle(changes: Partial<Particle>) {
       if (!currentParticleId) return null;
 
-      const existing = currentParticle || (await db.particles.where('data.id').equals(currentParticleId).first());
+      // Always fetch latest from DB first to avoid stale-cache overwrite races
+      const freshest = await db.particles.where('data.id').equals(currentParticleId).first();
+      const existing = freshest || currentParticle;
       if (!existing) return null;
 
       const updated: Particle = {
@@ -169,9 +171,7 @@ export const useCurrentParticle = () => {
     async updateInsightInCurrentParticle(insight: string | string[]) {
       if (!currentParticle) return;
 
-      return await actions.updateCurrentParticle({
-        data: { ...currentParticle.data, insight }
-      });
+      return await actions.updateCurrentParticle({ data: { ...currentParticle.data, insight } });
     },
 
     async setGeneratingInsight(generating: boolean) {

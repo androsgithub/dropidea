@@ -151,6 +151,7 @@ export const ParticleModal = () => {
                           currentParticle={currentParticle}
                           setGeneratingInsight={setGeneratingInsight}
                           updateInsightInCurrentParticle={updateInsightInCurrentParticle}
+                          setCurrentParticle={setCurrentParticle}
                         />
                       )}
                       {currentTab?.id == 'tasks' && (
