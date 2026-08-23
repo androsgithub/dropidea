@@ -366,9 +366,9 @@ Cada seção deve agregar valor real`;
             </button>
             {getInsights()
               .slice((currentPage - 1) * maxItems, (currentPage - 1) * maxItems + maxItems)
-              .map((insight, i) => (
+              .map((_insight, i) => (
                 <button
-                  key={`${currentParticle?.id ?? 'p'}-insight-${i + (currentPage - 1) * maxItems}`}
+                  key={`${currentParticle?.data.id ?? 'p'}-insight-${i + (currentPage - 1) * maxItems}`}
                   className="flex h-24 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl bg-white/2.5 p-8 font-semibold text-neutral-400 outline outline-white/5 transition-all hover:bg-white/5"
                   onClick={() => {
                     setCurrentInsightIndex(i + (currentPage - 1) * maxItems);

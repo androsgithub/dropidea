@@ -82,14 +82,15 @@ function App() {
 export default App;
 
 function Background() {
+  // Sem `blur-xs`/`opacity-*` aqui: a suavidade e a transparência agora são desenhadas
+  // dentro do canvas. O filtro CSS obrigava o navegador a refiltrar a viewport inteira a
+  // cada redesenho — sem aceleração de hardware isso é feito na CPU e sozinho custava
+  // ~52ms por frame. Os alfas abaixo são os antigos já multiplicados
+  // (0.35 * 0.30 e 0.35 * 0.20).
   return (
     <>
-      <div className="absolute size-full opacity-30 blur-xs">
-        <DecorativeCirclesBackground count={32} offset={12} />
-      </div>
-      <div className="absolute size-full opacity-20 blur-xs">
-        <DecorativeCirclesBackground count={64} offset={8} />
-      </div>
+      <DecorativeCirclesBackground count={32} offset={12} alpha={0.105} />
+      <DecorativeCirclesBackground count={64} offset={8} alpha={0.07} />
     </>
   );
 }
